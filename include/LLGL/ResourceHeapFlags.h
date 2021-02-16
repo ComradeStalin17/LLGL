@@ -30,7 +30,7 @@ class PipelineLayout;
 \brief Resource view descriptor structure.
 \see ResourceHeapDescriptor::resourceViews
 */
-struct ResourceViewDescriptor
+    struct ResourceViewDescriptor
 {
     //! Default constructor to initialize the resource view with a null pointer.
     ResourceViewDescriptor() = default;

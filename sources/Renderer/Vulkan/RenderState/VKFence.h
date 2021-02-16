@@ -10,6 +10,7 @@
 
 
 #include <LLGL/Fence.h>
+#include <cstdint>
 #include "../Vulkan.h"
 #include "../VKPtr.h"
 
