@@ -274,12 +274,17 @@ void VKRenderTarget::CreateFramebuffer(
             /* Create new image view for MIP-level and array layer specified in attachment descriptor */
             VKPtr<VkImageView> imageView{ device, vkDestroyImageView };
             {
+                uint32_t layerCount = 1;
+                if(IsCubeTexture(texture->GetDesc().type)) {
+                    layerCount = 6;
+                }
+
                 textureVK->CreateImageView(
                     device,
                     attachment.mipLevel,
                     1,
                     attachment.arrayLayer,
-                    1,
+                    layerCount,
                     imageView.ReleaseAndGetAddressOf()
                 );
 
