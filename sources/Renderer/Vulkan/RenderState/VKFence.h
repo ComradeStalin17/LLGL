@@ -27,7 +27,7 @@ class VKFence final : public Fence
         VKFence(const VKPtr<VkDevice>& device);
 
         void Reset(VkDevice device);
-        bool Wait(VkDevice device, std::uint64_t timeout);
+        bool Wait(VkDevice device, uint64_t timeout);
 
         // Returns the native VkFence handle.
         inline VkFence GetVkFence() const
