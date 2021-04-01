@@ -348,7 +348,7 @@ class LLGL_EXPORT CommandBuffer : public RenderSystemChild
         \see ClearAttachments
         \see BeginRenderPass
         */
-        virtual void Clear(long flags) = 0;
+        virtual void Clear(long flags, uint32_t layer = 0, uint32_t isCube = false) = 0;
 
         /**
         \brief Clears the specified attachments of the active render target.

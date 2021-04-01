@@ -400,7 +400,7 @@ void DbgCommandBuffer::SetClearStencil(std::uint32_t stencil)
     LLGL_DBG_COMMAND( "SetClearStencil", instance.SetClearStencil(stencil) );
 }
 
-void DbgCommandBuffer::Clear(long flags)
+void DbgCommandBuffer::Clear(long flags, uint32_t layer, uint32_t isCube)
 {
     if (debugger_)
     {
@@ -409,7 +409,7 @@ void DbgCommandBuffer::Clear(long flags)
         AssertInsideRenderPass();
     }
 
-    LLGL_DBG_COMMAND( "Clear", instance.Clear(flags) );
+    LLGL_DBG_COMMAND( "Clear", instance.Clear(flags, layer, isCube) );
 
     profile_.attachmentClears++;
 }

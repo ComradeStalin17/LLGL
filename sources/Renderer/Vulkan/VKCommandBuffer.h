@@ -117,7 +117,7 @@ class VKCommandBuffer final : public CommandBuffer
         void SetClearDepth(float depth) override;
         void SetClearStencil(std::uint32_t stencil) override;
 
-        void Clear(long flags) override;
+        void Clear(long flags, uint32_t layer, uint32_t isCube) override;
         void ClearAttachments(std::uint32_t numAttachments, const AttachmentClear* attachments) override;
 
         /* ----- Input Assembly ------ */
@@ -260,7 +260,7 @@ class VKCommandBuffer final : public CommandBuffer
         void CreateCommandBuffers(std::uint32_t bufferCount);
         void CreateRecordingFences(VkQueue graphicsQueue, std::uint32_t numFences);
 
-        void ClearFramebufferAttachments(std::uint32_t numAttachments, const VkClearAttachment* attachments);
+        void ClearFramebufferAttachments(std::uint32_t numAttachments, const VkClearAttachment* attachments, uint32_t layer = 0, uint32_t isCube = false);
 
         void ConvertRenderPassClearValues(
             const VKRenderPass& renderPass,

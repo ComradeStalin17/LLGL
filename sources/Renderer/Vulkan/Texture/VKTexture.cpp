@@ -101,7 +101,7 @@ TextureDescriptor VKTexture::GetDesc() const
         case TextureType::TextureCubeArray:
             texDesc.extent.width    = extent_.width;
             texDesc.extent.height   = extent_.height;
-            texDesc.arrayLayers     = numArrayLayers_ / 6;
+            texDesc.arrayLayers     = numArrayLayers_;
             break;
 
         case TextureType::Texture2DMS:
@@ -278,7 +278,7 @@ static std::uint32_t GetVkImageArrayLayers(const TextureDescriptor& desc, const 
 
         case VK_IMAGE_TYPE_2D:
             if (IsCubeTexture(desc.type))
-                return std::max(1u, desc.arrayLayers) * 6;
+                return std::max(1u, desc.arrayLayers);
             else
                 return std::max(1u, desc.arrayLayers);
 

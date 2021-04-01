@@ -146,7 +146,17 @@ void VKResourceHeap::CreateDescriptorPool(
     for (std::size_t i = 0; i < numResourceViews; ++i)
     {
         poolSizes[i].type               = bindings[i % numBindings].descriptorType;
-        poolSizes[i].descriptorCount    = 1;
+        auto res = desc.resourceViews[i].resource;
+        if(res->GetResourceType() == ResourceType::Texture) {
+            auto texture = LLGL_CAST(Texture*, res);
+            if (IsCubeTexture(texture->GetType())) {
+                poolSizes[i].descriptorCount = texture->GetDesc().arrayLayers;
+            } else {
+                poolSizes[i].descriptorCount = texture->GetDesc().arrayLayers;
+            }
+        } else {
+            poolSizes[i].descriptorCount = 1;
+        }
     }
 
     /* Compress pool sizes by merging equal types with accumulated number of descriptors */

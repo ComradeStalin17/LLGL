@@ -123,7 +123,7 @@ class DbgCommandBuffer final : public CommandBuffer
         void SetClearDepth(float depth) override;
         void SetClearStencil(std::uint32_t stencil) override;
 
-        void Clear(long flags) override;
+        void Clear(long flags, uint32_t layer, uint32_t isCube) override;
         void ClearAttachments(std::uint32_t numAttachments, const AttachmentClear* attachments) override;
 
         /* ----- Input Assembly ------ */

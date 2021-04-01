@@ -55,7 +55,6 @@ enum class AttachmentStoreOp
     Store,
 };
 
-
 /* ----- Structures ----- */
 
 /**
@@ -103,6 +102,8 @@ struct AttachmentFormatDescriptor
     \see AttachmentStoreOp
     */
     AttachmentStoreOp       storeOp = AttachmentStoreOp::Undefined;
+
+    bool inShaderUse = false;
 };
 
 /**

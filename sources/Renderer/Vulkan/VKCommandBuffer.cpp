@@ -488,40 +488,37 @@ static VkImageAspectFlags GetDepthStencilAspectMask(long flags)
     return aspectMask;
 }
 
-void VKCommandBuffer::Clear(long flags)
+void VKCommandBuffer::Clear(long flags,  uint32_t layer, uint32_t isCube)
 {
-    VkClearAttachment attachments[LLGL_MAX_NUM_ATTACHMENTS];
+        VkClearAttachment attachments[LLGL_MAX_NUM_ATTACHMENTS];
 
-    std::uint32_t numAttachments = 0;
+        std::uint32_t numAttachments = 0;
 
-    /* Fill clear descriptors for color attachments */
-    if ((flags & ClearFlags::Color) != 0)
-    {
-        numAttachments = std::min(numColorAttachments_, LLGL_MAX_NUM_COLOR_ATTACHMENTS);
-        for (std::uint32_t i = 0; i < numAttachments; ++i)
-        {
-            auto& attachment = attachments[i];
-            {
-                attachment.aspectMask       = VK_IMAGE_ASPECT_COLOR_BIT;
-                attachment.colorAttachment  = i;
-                attachment.clearValue.color = clearColor_;
+        /* Fill clear descriptors for color attachments */
+        if ((flags & ClearFlags::Color) != 0) {
+            numAttachments = std::min(numColorAttachments_, LLGL_MAX_NUM_COLOR_ATTACHMENTS);
+            for (std::uint32_t i = 0; i < numAttachments; ++i) {
+                auto &attachment = attachments[i];
+                {
+                    attachment.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    attachment.colorAttachment = i;
+                    attachment.clearValue.color = clearColor_;
+                }
             }
         }
-    }
 
-    /* Fill clear descriptor for depth-stencil attachment */
-    if ((flags & ClearFlags::DepthStencil) != 0 && hasDSVAttachment_)
-    {
-        auto& attachment = attachments[numAttachments++];
-        {
-            attachment.aspectMask               = GetDepthStencilAspectMask(flags);
-            attachment.colorAttachment          = 0; // ignored
-            attachment.clearValue.depthStencil  = clearDepthStencil_;
+        /* Fill clear descriptor for depth-stencil attachment */
+        if ((flags & ClearFlags::DepthStencil) != 0 && hasDSVAttachment_) {
+            auto &attachment = attachments[numAttachments++];
+            {
+                attachment.aspectMask = GetDepthStencilAspectMask(flags);
+                attachment.colorAttachment = 0; // ignored
+                attachment.clearValue.depthStencil = clearDepthStencil_;
+            }
         }
-    }
 
-    /* Clear all framebuffer attachments */
-    ClearFramebufferAttachments(numAttachments, attachments);
+        /* Clear all framebuffer attachments */
+        ClearFramebufferAttachments(numAttachments, attachments, layer, isCube);
 }
 
 void VKCommandBuffer::ClearAttachments(std::uint32_t numAttachments, const AttachmentClear* attachments)
@@ -1121,7 +1118,7 @@ void VKCommandBuffer::CreateRecordingFences(VkQueue graphicsQueue, std::uint32_t
     }
 }
 
-void VKCommandBuffer::ClearFramebufferAttachments(std::uint32_t numAttachments, const VkClearAttachment* attachments)
+void VKCommandBuffer::ClearFramebufferAttachments(std::uint32_t numAttachments, const VkClearAttachment* attachments, uint32_t layer, uint32_t isCube)
 {
     if (numAttachments > 0)
     {
@@ -1131,8 +1128,8 @@ void VKCommandBuffer::ClearFramebufferAttachments(std::uint32_t numAttachments, 
             clearRect.rect.offset.x     = 0;
             clearRect.rect.offset.y     = 0;
             clearRect.rect.extent       = framebufferExtent_;
-            clearRect.baseArrayLayer    = 0;
-            clearRect.layerCount        = 1;
+            clearRect.baseArrayLayer    = layer;
+            clearRect.layerCount        = isCube ? 6 : 1;
         }
         vkCmdClearAttachments(commandBuffer_, numAttachments, attachments, 1, &clearRect);
     }

@@ -82,7 +82,12 @@ static void Convert(
     dst.stencilLoadOp   = VKTypes::Map(srcStencil.loadOp);
     dst.stencilStoreOp  = VKTypes::Map(srcStencil.storeOp);
     dst.initialLayout   = (srcDepth.loadOp == AttachmentLoadOp::Load || srcStencil.loadOp == AttachmentLoadOp::Load ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_UNDEFINED);
-    dst.finalLayout     = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+    if(srcDepth.inShaderUse) {
+        dst.finalLayout     = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    } else {
+        dst.finalLayout     = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    }
 }
 
 void VKRenderPass::CreateVkRenderPass(VkDevice device, const RenderPassDescriptor& desc)
